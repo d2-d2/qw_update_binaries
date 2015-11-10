@@ -26,24 +26,24 @@ BINARYDIR=binaries
 
 b_update_locations() {
     if [ ${AUTOUPDATE} = "yes" ]; then
-        echo "\t[i] updatng binaries"
+        printf "\t[i] updatng binaries\n"
         val=LOC_$(b_upper ${PROJECT})
         vval=$(eval "echo \$$val")
         for binarylocation in ${vval}; do
             if [ ! -e ${binarylocation} ]; then
-                echo "\t\t[-] \"${binary}\" binary does not exists under \"${binarylocation}\" location, unable to update it. Please verify \"${val}\" variable"
+                printf "\t\t[-] \"${binary}\" binary does not exists under \"${binarylocation}\" location, unable to update it. Please verify \"${val}\" variable\n"
             else
-                echo "\t\t[+] updating \"${binarylocation}\""
+                printf "\t\t[+] updating \"${binarylocation}\"\n"
                 DNOW=$(date +%Y-%m-%d@%H%M%S)
-                echo "\t\t\t[+] creating backup copy: ${binarylocation}_${DNOW}"
+                printf "\t\t\t[+] creating backup copy: ${binarylocation}_${DNOW}\n"
                 cp -pr ${binarylocation} ${binarylocation}_${DNOW}
                 cp -pr ${SRCROOTDIR}/${PROJECT}/${BINARYDIR}/${binary} ${binarylocation}
                 chmod 755 ${binarylocation}
             fi
         done
-        echo "\t\t[i] done, remember to restart \"${PROJECT}\""
+        printf "\t\t[i] done, remember to restart \"${PROJECT}\"\n"
     else
-        echo "\t[i] automatic updates are disabled, please copy new binaries manually"
+        printf "\t[i] automatic updates are disabled, please copy new binaries manually\n"
     fi
 }
 
@@ -61,20 +61,20 @@ b_set_debug_options() {
 
 b_check_status() {
     if [ ${?} = 0 ]; then
-        echo "\t\t[+] OK"
+        printf "\t\t[+] OK\n"
     else
-        echo "\t\t[-] operation failed"
+        printf "\t\t[-] operation failed\n"
         exit 1
     fi
 }
 
 b_git_update() {
     if [ ! -e ${SRCROOTDIR}/${PROJECT} ]; then
-        echo "\t[-] unable to find proper \"${PROJECT}\" sources, trying git clone https://github.com/deurk/${PROJECT}"
+        printf "\t[-] unable to find proper \"${PROJECT}\" sources, trying git clone https://github.com/deurk/${PROJECT}\n"
         git clone ${GITOPTIONS} https://github.com/deurk/${PROJECT}
         b_check_status
     else
-        echo "\t[+] trying to update sources first"
+        printf "\t[+] trying to update sources first\n"
         cd ${SRCROOTDIR}/${PROJECT}
         git pull ${GITOPTIONS}
         b_check_status
@@ -82,7 +82,7 @@ b_git_update() {
 }
 
 b_project() {
-    echo "[i] working on \"${PROJECT}\" project"
+    printf "[i] working on \"${PROJECT}\" project\n"
     b_git_update
     if [ -e ${SRCROOTDIR}/${PROJECT}/build/make ]; then
         cd ${SRCROOTDIR}/${PROJECT}/build/make
@@ -91,15 +91,15 @@ b_project() {
     fi
     $(eval make ${GCCOPTIONS} clean ${CFGOPTIONS})
     if [ ! -e ${SRCROOTDIR}/${PROJECT}/${BINARYDIR} ]; then
-        echo "\t\t[i] \"creating ${SRCROOTDIR}/${PROJECT}/${BINARYDIR}\" directory"
+        printf "\t\t[i] \"creating ${SRCROOTDIR}/${PROJECT}/${BINARYDIR}\" directory\n"
         mkdir -p ${SRCROOTDIR}/${PROJECT}/${BINARYDIR}
     fi
     if [ -e ./configure ]; then
-        echo "\t[+] configure"
+        printf "\t[+] configure\n"
         $(eval ./configure ${CFGOPTIONS})
         b_check_status
     fi
-    echo "\t[+] make"
+    printf "\t[+] make\n"
     $(eval make ${GCCOPTIONS} ${CFGOPTIONS})
     b_check_status
     if [ -e ${SRCROOTDIR}/${PROJECT}/build/make/${binary} ]; then
@@ -107,26 +107,26 @@ b_project() {
     elif [ -e ${SRCROOTDIR}/${PROJECT}/${binary} ]; then
         mv ${SRCROOTDIR}/${PROJECT}/${binary} ${SRCROOTDIR}/${PROJECT}/${BINARYDIR}/
     else
-        echo "\t[-] unable to find \"${binary}\" (checked ${SRCROOTDIR}/${PROJECT}/build/make/${binary} and ${SRCROOTDIR}/${PROJECT}/${binary})"
+        printf "\t[-] unable to find \"${binary}\" (checked ${SRCROOTDIR}/${PROJECT}/build/make/${binary} and ${SRCROOTDIR}/${PROJECT}/${binary})\n"
         exit 1
     fi
-    echo "\t[i] done, \"${binary}\" should be available under \"${SRCROOTDIR}/${PROJECT}/${BINARYDIR}\" directory"
+    printf "\t[i] done, \"${binary}\" should be available under \"${SRCROOTDIR}/${PROJECT}/${BINARYDIR}\" directory\n"
 }
 
 b_root() {
     if [ $(whoami) = root ]; then
-        echo "[i] please do not run this script as root"
+        printf "[i] please do not run this script as root\n"
         exit 1
     fi
 }
 
 if [ ! -e ${SRCROOTDIR} ]; then
-    echo "[-] unable to find ${SRCROOTDIR}. Create one (mkdir ${SRCROOTDIR}) and launch this script again"
+    printf "[-] unable to find ${SRCROOTDIR}. Create one (mkdir ${SRCROOTDIR}) and launch this script again\n"
     exit 1
 fi
 
-if [ $(which git) = "" ]; then
-    echo "[-] unable to find git binaries, this is required. Please install it (Debian: sudo apt-get install git)"
+if [ $(which git > /dev/null 2>&1; echo ${?}) -ne 0 ]; then
+    printf "[-] unable to find git binaries, this is required. Please install it (Debian: sudo apt-get install git)\n"
     exit 1
 fi
 
@@ -154,7 +154,7 @@ case ${PROJECT} in
                 b_project
                 b_update_locations
                 ;;
-    *)          echo "[-] usage: $(basename ${0}) [ktx|mvdparser|mvdsv|qtv|qwfwd]\n\nthis script is using Deurk sources (https://github.com/deurk/)"
+    *)          printf "[-] usage: $(basename ${0}) [ktx|mvdparser|mvdsv|qtv|qwfwd]\n\nthis script is using Deurk sources (https://github.com/deurk/)\n"
                 exit 1
                 ;;
 esac
