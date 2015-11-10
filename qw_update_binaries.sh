@@ -1,6 +1,6 @@
 #!/bin/bash
 
-################################################### CONFIGURATION STARTS HERE
+############################## CONFIGURATION STARTS HERE
 # directory to store GIT sources
 SRCROOTDIR=/home/users/quake/src/_official
 # full path(s) to mvdsv binary currently installed in your system
@@ -17,7 +17,7 @@ LOC_QWFWD=
 AUTOUPDATE=yes
 # debug: 0=no, anything else=yes
 DEBUG=0
-################################################### CONFIGURATION END HERE - DO NOT MODIFY ANYTHING BELOW THIS LINE
+############################## CONFIGURATION END HERE - DO NOT MODIFY ANYTHING BELOW THIS LINE
 
 # project name to compile
 PROJECT=${1}

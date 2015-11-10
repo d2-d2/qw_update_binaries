@@ -18,7 +18,7 @@ This shell script will update your QW binaries. It's using Deurk GitHub sources 
 Put this script anywhere in your system. Remember to update configuration section. Every variable is described so you shouldn't have any problems with that.
 
 ```
-################################################### CONFIGURATION STARTS HERE
+############################## CONFIGURATION STARTS HERE
 # directory to store GIT sources
 SRCROOTDIR=/home/users/quake/src/_official
 # full path(s) to mvdsv binary currently installed in your system
@@ -35,7 +35,7 @@ LOC_QWFWD=
 AUTOUPDATE=yes
 # debug: 0=no, anything else=yes
 DEBUG=0
-################################################### CONFIGURATION END HERE - DO NOT MODIFY ANYTHING BELOW THIS LINE
+############################## CONFIGURATION END HERE - DO NOT MODIFY ANYTHING BELOW THIS LINE
 ```
 
 ## Example outputs:
