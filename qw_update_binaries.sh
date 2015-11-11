@@ -14,9 +14,9 @@ LOC_QTV=
 # full path to qwfwd binary currently installed in your system
 LOC_QWFWD=
 # automatically update sources?
-AUTOUPDATE=yes
+AUTOUPDATE=no
 # debug: 0=no, anything else=yes
-DEBUG=0
+DEBUG=1
 ################################################### CONFIGURATION END HERE - DO NOT MODIFY ANYTHING BELOW THIS LINE
 
 # project name to compile
@@ -81,6 +81,16 @@ b_git_update() {
     fi
 }
 
+b_run() {
+    if [ $DEBUG -ne 0 ]; then
+        v=$(exec 2>&1 && set -x && set -- "$@")
+        echo "#### DEBUG: executing ->${v#*--} ####"
+        "$@"
+    else
+        "$@" >/dev/null 2>&1
+    fi
+}
+
 b_project() {
     printf "[i] working on \"${PROJECT}\" project\n"
     b_git_update
@@ -89,18 +99,18 @@ b_project() {
     else
         cd ${SRCROOTDIR}/${PROJECT}
     fi
-    $(eval make ${GCCOPTIONS} clean ${CFGOPTIONS})
+    b_run make ${GCCOPTIONS}
     if [ ! -e ${SRCROOTDIR}/${PROJECT}/${BINARYDIR} ]; then
         printf "\t\t[i] \"creating ${SRCROOTDIR}/${PROJECT}/${BINARYDIR}\" directory\n"
         mkdir -p ${SRCROOTDIR}/${PROJECT}/${BINARYDIR}
     fi
     if [ -e ./configure ]; then
         printf "\t[+] configure\n"
-        $(eval ./configure ${CFGOPTIONS})
+        b_run ./configure
         b_check_status
     fi
     printf "\t[+] make\n"
-    $(eval make ${GCCOPTIONS} ${CFGOPTIONS})
+    b_run make ${GCCOPTIONS}
     b_check_status
     if [ -e ${SRCROOTDIR}/${PROJECT}/build/make/${binary} ]; then
         mv ${SRCROOTDIR}/${PROJECT}/build/make/${binary} ${SRCROOTDIR}/${PROJECT}/${BINARYDIR}/
