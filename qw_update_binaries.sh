@@ -138,7 +138,7 @@ PROJECT=${1}
 # destination directory created under each project
 BINARYDIR=binaries
 # logfile for debugging purposes
-if [ ${DEBUG} -ne 0 ]]; then
+if [ ${DEBUG} -ne 0 ]; then
     rm /tmp/${PROJECT}_debug.log > /dev/null 2>&1
     LOGFILE=/tmp/${PROJECT}_debug.log
 else
