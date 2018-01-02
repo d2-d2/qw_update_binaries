@@ -1,6 +1,6 @@
 #!/bin/sh
 
-################################################### CONFIGURATION STARTS HERE
+############################################### CONFIGURATION STARTS HERE
 # directory to store GIT sources
 SRCROOTDIR=/home/users/quake/src/_official
 # full path(s) to mvdsv binary currently installed in your system
@@ -17,7 +17,7 @@ LOC_QWFWD=
 AUTOUPDATE=no
 # debug: 0=no, anything else=yes
 DEBUG=0
-################################################### CONFIGURATION END HERE - DO NOT MODIFY ANYTHING BELOW THIS LINE
+############################################### CONFIGURATION END HERE - DO NOT MODIFY ANYTHING BELOW THIS LINE
 
 b_update_locations() {
     if [ ${AUTOUPDATE} = "yes" ]; then
